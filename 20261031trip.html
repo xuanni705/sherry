@@ -67,6 +67,7 @@ h2{font-size:22px;margin-bottom:12px;display:inline-block;background:var(--sun);
 .sh .row .pl{flex:none}.sh .tm{display:flex;gap:10px;align-items:center}.sh .tm b{font-weight:normal}.sh .tm small{display:block;font-size:13px}
 .todo{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .todo label{display:flex;gap:10px;align-items:center;background:#fff;border:3px solid var(--ink);border-radius:18px;padding:8px 12px;cursor:pointer}
+.todo li.gh{font-weight:700;margin-top:10px;font-size:15px}
 .todo input{appearance:none;-webkit-appearance:none;flex:none;width:26px;height:26px;border:3px solid var(--ink);border-radius:8px;background:var(--paper);margin:0;display:grid;place-items:center}
 .todo input:checked{background:var(--leaf)}
 .todo input:checked::after{content:"";width:6px;height:12px;border:solid var(--ink);border-width:0 3px 3px 0;transform:rotate(45deg) translate(-1px,-1px)}
@@ -166,7 +167,7 @@ footer{text-align:center;font-size:13px;margin-top:30px}
 </section>
 
 <section id="todo">
-<h2>出發前待辦</h2>
+<h2>出發前待辦與行李</h2>
 <div id="prog" role="progressbar" aria-valuemin="0" aria-valuemax="100"><i></i></div>
 <ul class="todo" id="todolist"></ul>
 </section>
@@ -273,11 +274,11 @@ function shows(mode){
 }
 vs.onclick=function(){shows("s")};vt.onclick=function(){shows("t")};shows("s");
 /* todo */
-var T=["護照與台胞證（珠海過關用）","機票或電子登機證","下載長隆旅遊 App，確認設施與場次","預訂 11/1 企鵝酒店帝企鵝自助餐","準備澳門幣與人民幣現金","雨衣與替換衣物（冰山過山車會濺水）","確認海底餐廳是否有低消","手機網路、行動電源與充電線","11/2 行李整理，18:15 前到澳門機場"],S={};
+var T=["護照與台胞證（珠海過關用）","機票或電子登機證","下載長隆旅遊 App，確認設施與場次","預訂 11/1 企鵝酒店帝企鵝自助餐","準備澳門幣與人民幣現金","雨衣與替換衣物（冰山過山車會濺水）","確認海底餐廳是否有低消","手機網路、行動電源與充電線","11/2 行李整理，18:15 前到澳門機場","#行李｜證件與錢","訂房與門票電子憑證截圖存手機","信用卡","下載支付寶並完成綁定","下載 WeChat 並綁定信用卡","#行李｜通訊與電子","萬用轉接頭（澳門英規、珠海中規）","漫遊／eSIM／VPN（珠海網路有限制）","耳機、相機","#行李｜衣物","3 天換洗衣物（約 22–28°C，短袖加薄外套）","好走的鞋","雨衣","防曬帽、墨鏡","泳衣（酒店泳池用）","防水手機袋","#行李｜盥洗與藥品","牙刷牙膏、保養品（手提液體 100ml 以下）","防曬乳、護唇膏","常備藥（腸胃、止痛、感冒、暈車）","OK 繃","個人衛生用品","#行李｜其他","摺疊購物袋","小包包（排隊玩設施用）","濕紙巾、面紙","小水壺"],S={};
 try{S=JSON.parse(localStorage.getItem("macau-todo")||"{}")}catch(e){}
 var ul=$("todolist");
-T.forEach(function(t,i){var li=document.createElement("li"),l=document.createElement("label"),c=document.createElement("input"),s=document.createElement("span");c.type="checkbox";c.checked=!!S[i];s.textContent=t;c.onchange=function(){S[i]=c.checked;try{localStorage.setItem("macau-todo",JSON.stringify(S))}catch(e){}prog()};l.appendChild(c);l.appendChild(s);li.appendChild(l);ul.appendChild(li)});
-function prog(){var n=T.filter(function(_,i){return S[i]}).length,p=Math.round(n/T.length*100),b=$("prog");b.firstElementChild.style.width=p+"%";b.setAttribute("aria-valuenow",p);b.setAttribute("aria-label","已完成 "+n+"／"+T.length)}
+T.forEach(function(t,i){var li=document.createElement("li");if(t.charAt(0)==="#"){li.className="gh";li.textContent=t.slice(1);ul.appendChild(li);return}var l=document.createElement("label"),c=document.createElement("input"),s=document.createElement("span");c.type="checkbox";c.checked=!!S[i];s.textContent=t;c.onchange=function(){S[i]=c.checked;try{localStorage.setItem("macau-todo",JSON.stringify(S))}catch(e){}prog()};l.appendChild(c);l.appendChild(s);li.appendChild(l);ul.appendChild(li)});
+function prog(){var n=T.filter(function(t,i){return S[i]&&t.charAt(0)!=="#"}).length,N=T.filter(function(t){return t.charAt(0)!=="#"}).length,p=Math.round(n/N*100),b=$("prog");b.firstElementChild.style.width=p+"%";b.setAttribute("aria-valuenow",p);b.setAttribute("aria-label","已完成 "+n+"／"+N)}
 prog();
 /* countdown */
 var GO=new Date("2026-10-31T10:00:00+08:00"),END=new Date("2026-11-02T22:00:00+08:00");
